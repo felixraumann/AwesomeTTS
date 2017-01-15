@@ -32,6 +32,29 @@ from .common import Trait
 __all__ = ['SAPI5JS']
 
 
+LANGUAGE_CODES = {
+    '404': 'zh',
+    '405': 'cs',
+    '406': 'da',
+    '407': 'de',
+    '408': 'el',
+    '409': 'en',
+    '40a': 'es',
+    '40c': 'fr',
+    '410': 'it',
+    '411': 'jp',
+    '412': 'ko',
+    '413': 'nl',
+    '415': 'pl',
+    '416': 'pt',
+    '41d': 'sv',
+    '41f': 'tr',
+    '436': 'af',
+    '439': 'hi',
+    '804': 'zh',
+}
+
+
 class SAPI5JS(Service):
     """
     Provides a Service-compliant implementation for SAPI 5 via JScript.
@@ -95,9 +118,21 @@ class SAPI5JS(Service):
             return ''.join(unichr(int(string[i:i + 4], 16))
                            for i in range(0, len(string), 4))
 
+        def convlang(string):
+            """Get language code"""
+            string = hex2uni(string).lower().strip()
+            return LANGUAGE_CODES.get(string, string)
+
         self._voice_list = sorted({
-            (voice, voice)
-            for voice in [hex2uni(voice).strip() for voice in output]
+            (voice, voice + ' (' + language + ')')
+            for (voice, language) in [
+                (
+                    hex2uni(tokens[0]).strip(),
+                    convlang(tokens[1]).strip()
+                )
+                for tokens
+                in [line.split() for line in output]
+            ]
             if voice
         }, key=lambda voice: voice[1].lower())
 

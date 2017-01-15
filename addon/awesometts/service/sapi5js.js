@@ -150,7 +150,23 @@ if (command === 'voice-list') {
     };
 
     for (i = 0; i < voices.count; ++i) {
-        WScript.echo(getHexFromUnicode(voices.item(i).getAttribute('name')));
+        var name;
+        try { name = voices.item(i).getAttribute('name'); }
+        catch (e) { }
+
+        var language;
+        try { language = voices.item(i).getAttribute('language'); }
+        catch (e) { }
+
+        if (typeof name == 'string' && name.length > 0) {
+          WScript.echo(
+              getHexFromUnicode(name) + ' ' +
+              (
+                  language && getHexFromUnicode(language) ||
+                  getHexFromUnicode('unknown')
+              )
+          );
+        }
     }
 } else if (command === 'speech-output') {
     var found = false;
