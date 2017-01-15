@@ -28,6 +28,17 @@ class Bundle(object):  # exposes attributes, not methods, pylint:disable=R0903
     Exposes a class that can be used for bundling some objects together.
     This can be used as an alternative to a dict, and will have a syntax
     that is cleaner and shorter.
+
+    Example
+
+        >>> from bundle import Bundle
+        >>> things = Bundle(a=1, b=2, c=3)
+        >>> things.a
+        1
+        >>> things.b
+        2
+        >>> things.c
+        3
     """
 
     def __init__(self, **kwargs):
