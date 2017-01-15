@@ -188,7 +188,7 @@ class Router(object):
                 (svc_id, service['name'])
                 for svc_id, service in self._services.lookup.items()
                 if service['instance']
-            ], key=lambda (svc_id, text): text.lower())
+            ], key=lambda service: service[1].lower())
 
         return self._services.avail
 
