@@ -239,7 +239,15 @@ class Reviewer(object):
             else:
                 self._addon.logger.warn("State changed; not playing audio")
 
-        for tag in BeautifulTTS(html)('tts'):
+        try:
+            tags = BeautifulTTS(html)('tts')
+        except ValueError:
+            if '<tts' in html:
+                self._alerts("The TTS cannot be played on this card because "
+                             "the HTML cannot be parsed (is it valid?)")
+            return
+
+        for tag in tags:
             self._play_html_tag(tag, from_template, playback_wrapper,
                                 parent, show_errors)
 
@@ -461,8 +469,7 @@ class Reviewer(object):
                 else self._get_answer(card) if state == 'answer'
                 else None)
 
-        return html and (BeautifulTTS(html)('tts') or
-                         self.RE_LEGACY_TAGS.search(html))
+        return html and ('<tts' in html or self.RE_LEGACY_TAGS.search(html))
 
 
 class BeautifulTTS(BeautifulSoup):  # pylint:disable=abstract-method
