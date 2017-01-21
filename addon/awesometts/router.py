@@ -388,6 +388,8 @@ class Router(object):
 
             if not text:
                 raise ValueError("No speakable text is present")
+            if len(text) > 2000:
+                raise ValueError("Text to speak is too long")
             svc_id, service, options = self._validate_service(svc_id, options)
             text = service['instance'].modify(text)
             if not text:
