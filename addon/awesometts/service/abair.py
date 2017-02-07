@@ -35,7 +35,6 @@ SPEEDS = ["Very slow", "Slower", "Normal", "Faster", "Very fast"]
 DEFAULT_SPEED = "Normal"
 assert DEFAULT_SPEED in SPEEDS
 
-TEXT_LENGTH_LIMIT = 2000
 FORM_ENDPOINT = 'http://www.abair.tcd.ie/index.php'
 RE_FILENAME = re_compile(r'name="filestozip" type="hidden" value="([\d_]+)"')
 AUDIO_URL = 'http://www.abair.tcd.ie/audio/%s.mp3'
@@ -83,10 +82,6 @@ class Abair(Service):
 
     def run(self, text, options, path):
         """Find audio filename and then download it."""
-
-        if len(text) > TEXT_LENGTH_LIMIT:
-            raise IOError("abair.ie only supports input up to %d characters." %
-                          TEXT_LENGTH_LIMIT)
 
         payload = self.net_stream(
             (
